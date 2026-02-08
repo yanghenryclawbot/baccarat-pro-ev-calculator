@@ -2,6 +2,7 @@
   "name": "baccarat-pro-ev-calculator",
   "private": true,
   "version": "0.0.0",
+  "homepage": "https://yanghenry7.github.io/baccarat-pro-ev-calculator",
   "main": "src-main/main.cjs",
   "scripts": {
     "dev": "vite",
