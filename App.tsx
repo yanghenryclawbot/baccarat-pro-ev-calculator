@@ -43,21 +43,52 @@ const App: React.FC = () => {
       // 如果焦點在輸入框，不處理鍵盤扣牌
       if (isInputFocused) return;
       
-      // Number keys 1-9, 0, J, Q, K
-      const keyMap: Record<string, number> = {
+      // Number keys 1-9
+      const numMap: Record<string, number> = {
         '1': 1, '2': 2, '3': 3, '4': 4, '5': 5,
-        '6': 6, '7': 7, '8': 8, '9': 9, '0': 0,
-        'j': 11, 'J': 11, 'q': 12, 'Q': 12, 'k': 13, 'K': 13
+        '6': 6, '7': 7, '8': 8, '9': 9
       };
       
-      if (keyMap.hasOwnProperty(e.key)) {
+      if (numMap.hasOwnProperty(e.key)) {
         e.preventDefault();
-        updateCount(keyMap[e.key], -1);
+        updateCount(numMap[e.key], -1);
       }
       
-      // Enter key adds separator
-      if (e.key === 'Enter') {
+      // 0 鍵：移除 10
+      if (e.key === '0') {
         e.preventDefault();
+        updateCount(10, -1);
+      }
+      
+      // A 鍵：移除 Ace (1)
+      if (e.key === 'a' || e.key === 'A') {
+        e.preventDefault();
+        updateCount(1, -1);
+      }
+      
+      // T 鍵：移除 10
+      if (e.key === 't' || e.key === 'T') {
+        e.preventDefault();
+        updateCount(10, -1);
+      }
+      
+      // J, Q, K 鍵
+      const faceMap: Record<string, number> = {
+        'j': 11, 'J': 11,
+        'q': 12, 'Q': 12,
+        'k': 13, 'K': 13
+      };
+      if (faceMap.hasOwnProperty(e.key)) {
+        e.preventDefault();
+        updateCount(faceMap[e.key], -1);
+      }
+      
+      // 空格鍵：Q + 分隔線
+      if (e.key === ' ') {
+        e.preventDefault();
+        // 先加 Q
+        updateCount(12, -1);
+        // 再加分隔線
         setCardHistory(h => ['|', ...h].slice(0, 100));
       }
     };
@@ -131,8 +162,7 @@ const App: React.FC = () => {
     const all = [
       results.player, results.banker, results.tie,
       results.playerPair, results.bankerPair, ...results.tieBonuses,
-      results.tiger, results.smallTiger, results.bigTiger, results.tigerTie,
-      results.tigerPair
+      results.tiger, results.smallTiger, results.bigTiger, results.tigerTie
     ];
     return all.filter(item => item.ev > 0).sort((a, b) => b.ev - a.ev);
   };
@@ -199,14 +229,18 @@ const App: React.FC = () => {
             </svg>
             Card Inventory
           </h2>
-          <p className="text-xs text-slate-500 mb-3">⌨️ 按鍵盤 0-9, J, Q, K 快速輸入</p>
+          <p className="text-xs text-slate-500 mb-3">⌨️ 按鍵盤 A/T/0-9, J, Q, K 快速輸入 (空格分隔)</p>
           <div className="grid grid-cols-2 sm:grid-cols-5 lg:grid-cols-4 gap-3 mb-4">
             {TOTAL_RANKS.map(rank => (
-              <div key={rank} className="bg-slate-900 p-2 rounded-lg border border-slate-700 flex flex-col gap-1">
+              <div key={rank} className="bg-slate-900 p-2 rounded-lg border border-slate-700 flex flex-col gap-1 relative">
                 <div className="flex justify-between items-center">
                   <span className={`text-xl font-black mono ${rank >= 10 ? 'text-purple-400' : 'text-slate-300'}`}>
                     {RANK_LABELS[rank]}
                   </span>
+                  {/* 小燈泡 - 當有推薦下注時顯示在K右邊 */}
+                  {rank === 13 && getAllPositiveEVBets().length > 0 && (
+                    <span className="absolute -right-6 top-1/2 -translate-y-1/2 text-yellow-400 animate-pulse" title="有推薦下注" style={{ fontSize: '16px' }}>💡</span>
+                  )}
                   <span className="text-sm font-bold text-blue-400 mono">{counts[rank]}</span>
                 </div>
                 <div className="flex gap-1">
@@ -226,10 +260,13 @@ const App: React.FC = () => {
           {/* Separator Button */}
           <div className="border-t border-slate-700 pt-4">
             <button
-              onClick={() => setCardHistory(h => ['|', ...h].slice(0, 100))}
+              onClick={() => {
+                updateCount(12, -1);
+                setCardHistory(h => ['|', ...h].slice(0, 100));
+              }}
               className="w-full bg-slate-700 hover:bg-slate-600 text-slate-300 hover:text-white py-2 rounded text-sm font-bold uppercase tracking-widest transition-colors"
             >
-              + 分隔線 (Enter)
+              + 分隔線 (空格)
             </button>
           </div>
 
@@ -374,8 +411,7 @@ const App: React.FC = () => {
               {results && [
                 results.player, results.banker, results.tie,
                 results.playerPair, results.bankerPair,
-                results.tiger, results.smallTiger, results.bigTiger, results.tigerTie,
-                results.tigerPair
+                results.tiger, results.smallTiger, results.bigTiger, results.tigerTie
               ].map((item, idx) => {
                 const kellyAmount = calculateKellyBet(item);
                 const isPositive = item.ev > 0;
