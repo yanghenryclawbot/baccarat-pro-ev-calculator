@@ -150,9 +150,8 @@ const App: React.FC = () => {
 
   const calculateKellyBet = (item: EVResult) => {
     if (item.ev <= 0 || item.payout <= 0) return 0;
-    const fraction = item.ev / item.payout;
     // 本金顯示為"萬"，實際金額 = bankroll * 10000
-    return Math.floor(bankroll * 10000 * fraction);
+    return Math.floor(bankroll * 10000 * item.ev / item.payout);
   };
 
   const getAllPositiveEVBets = (): EVResult[] => {
@@ -178,12 +177,9 @@ const App: React.FC = () => {
             <div className="flex flex-wrap gap-3">
               {(() => {
                 const positiveBets = getAllPositiveEVBets();
+                
                 if (positiveBets.length === 0) {
-                  return (
-                    <div className="bg-slate-900/50 border border-slate-700 px-4 py-3 rounded-xl flex items-center gap-3">
-                      <span className="text-slate-500 font-bold uppercase text-xs tracking-widest">Mathematical Advantage Wait</span>
-                    </div>
-                  );
+                  return null;
                 }
 
                 return positiveBets.map((bet, i) => {
