@@ -28,11 +28,9 @@ const App: React.FC = () => {
   useEffect(() => {
     const runCalc = async () => {
       setIsCalculating(true);
-      setTimeout(async () => {
-        const res = await calculateEV(counts, payouts, rolling);
-        setResults(res);
-        setIsCalculating(false);
-      }, 0);
+      const res = await calculateEV(counts, payouts, rolling);
+      setResults(res);
+      setIsCalculating(false);
     };
     runCalc();
   }, [counts, payouts, rolling]);
