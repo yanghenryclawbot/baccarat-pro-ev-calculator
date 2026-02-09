@@ -143,8 +143,7 @@ const App: React.FC = () => {
       <footer className="bg-slate-800 border border-blue-900/50 p-6 rounded-2xl shadow-2xl">
         <div className="flex flex-col md:flex-row items-start justify-between gap-6">
           <div className="flex-1">
-            <h4 className="text-slate-400 text-xs font-bold uppercase tracking-widest mb-4 flex items-center gap-2">
-              <span className={`w-2 h-2 rounded-full ${isCalculating ? 'bg-blue-500 animate-ping' : 'bg-green-500'}`}></span>
+            <h4 className="text-slate-400 text-xs font-bold uppercase tracking-widest mb-4">
               Strategic Recommendations (推薦)
             </h4>
 
@@ -192,16 +191,6 @@ const App: React.FC = () => {
       </footer>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 relative">
-        {/* Loading Overlay */}
-        {isCalculating && (
-          <div className="absolute inset-0 z-50 bg-slate-900/40 backdrop-blur-[2px] flex items-center justify-center rounded-xl">
-            <div className="bg-slate-800 border border-blue-500/50 px-6 py-3 rounded-full flex items-center gap-3 shadow-2xl">
-              <div className="w-4 h-4 border-2 border-blue-400 border-t-transparent rounded-full animate-spin"></div>
-              <span className="text-blue-400 font-bold text-sm tracking-widest uppercase animate-pulse">Exact Calculation...</span>
-            </div>
-          </div>
-        )}
-
         {/* Left Column - Only Card Inventory */}
         <div className="lg:col-span-5 bg-slate-800/50 rounded-xl p-4 border border-slate-700">
           <h2 className="text-sm font-semibold mb-3 flex items-center gap-2">
