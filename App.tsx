@@ -81,12 +81,9 @@ const App: React.FC = () => {
         updateCount(faceMap[e.key], -1);
       }
       
-      // 空格鍵：Q + 分隔線
+      // 空格鍵：分隔線
       if (e.key === ' ') {
         e.preventDefault();
-        // 先加 Q
-        updateCount(12, -1);
-        // 再加分隔線
         setCardHistory(h => ['|', ...h].slice(0, 100));
       }
     };
@@ -223,7 +220,7 @@ const App: React.FC = () => {
             </svg>
             Card Inventory
           </h2>
-          <p className="text-xs text-slate-500 mb-3">⌨️ 按鍵盤 A/T/0-9, J, Q, K 快速輸入 (空格分隔)</p>
+          <p className="text-xs text-slate-500 mb-3">⌨️ 按鍵盤 A/T/0-9, J, Q, K 快速輸入</p>
           <div className="grid grid-cols-2 sm:grid-cols-5 lg:grid-cols-4 gap-3 mb-4">
             {TOTAL_RANKS.map(rank => (
               <div key={rank} className="bg-slate-900 p-2 rounded-lg border border-slate-700 flex flex-col gap-1 relative">
@@ -260,7 +257,7 @@ const App: React.FC = () => {
               }}
               className="w-full bg-slate-700 hover:bg-slate-600 text-slate-300 hover:text-white py-2 rounded text-sm font-bold uppercase tracking-widest transition-colors"
             >
-              + 分隔線 (空格)
+              + 分隔線
             </button>
           </div>
 
