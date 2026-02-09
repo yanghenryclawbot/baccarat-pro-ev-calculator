@@ -252,7 +252,6 @@ const App: React.FC = () => {
           <div className="border-t border-slate-700 pt-4">
             <button
               onClick={() => {
-                updateCount(12, -1);
                 setCardHistory(h => ['|', ...h].slice(0, 100));
               }}
               className="w-full bg-slate-700 hover:bg-slate-600 text-slate-300 hover:text-white py-2 rounded text-sm font-bold uppercase tracking-widest transition-colors"
